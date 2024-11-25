@@ -1,13 +1,19 @@
-import streamlit as st
-import requests
 import os
+import requests
+import streamlit as st
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 from openai import OpenAI
-from bs4 import BeautifulSoup  # Thêm BeautifulSoup
 
+# Load biến môi trường từ .env
+load_dotenv()
 
-client = OpenAI(
-    api_key='sk-iINMXEGFa7FZDdNPriY314w40j02O0d3j0JdbZzIDqT3BlbkFJiqBmh6A0KW5RrssJifE9W4h6GLzN3lhsbWBnpTYR8A'
-)
+# Lấy API key từ biến môi trường
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Khởi tạo OpenAI client
+client = OpenAI(api_key=OPENAI_API_KEY)
+
 
 # Title of the app
 st.title("Web Content Analyzer with GPT")
@@ -51,7 +57,12 @@ if st.button("Analyze URL"):
                     response = client.chat.completions.create(
                         model="gpt-4o",  # Use the appropriate model
                         messages=[
-                            {"role": "system", "content": "You are a helpful assistant that summarizes webpage content."},
+                            {"role": "system", "content": """Bạn là một trợ lý giúp tôi tóm tắt nội dung trang web trong đường dẫn. Nội dung bạn phải trình bày bao gồm:
+                                                        - Tên công ty.
+                                                        - Tóm tắt nội dung trang web.
+                                                        - Mô tả các sản phẩm kinh doanh của họ. 
+                                                        - Liệt kê tất cả sản phẩm của trang web (nếu có).
+                                                        """},
                             {"role": "user", "content": text_content}
                         ]
                     )
