@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from openai import OpenAI
 
 # Load biến môi trường từ .env
-load_dotenv()
+#load_dotenv()
 
 # Lấy API key từ biến môi trường
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
